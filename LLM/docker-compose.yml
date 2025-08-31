@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # ... other services (frontend, backend, redis, chromadb) ...
+
+  # vLLM Inference Server
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+  - MODEL_PATH=codellama/CodeLlama-7b-hf
+      - HOST=0.0.0.0
+      - PORT=8001
+    volumes:
+      - ./models:/app/models
+    networks:
+      - logiccraft-network
+
+networks:
+  logiccraft-network:
+    driver: bridge

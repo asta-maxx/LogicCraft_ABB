@@ -1,0 +1,10 @@
+django>=4.2
+ djangorestframework
+ redis
+ django-cors-headers
+ requests
+ celery
+ django-environ
+
+chromadb
+sentence-transformers
