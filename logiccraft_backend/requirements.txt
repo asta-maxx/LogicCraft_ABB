@@ -4,6 +4,12 @@ django>=4.2
  django-cors-headers
  requests
  celery
+django-environ
+psycopg2-binary
+pytest
+pytest-django
+chromadb
+sentence-transformers
  django-environ
 
 chromadb
