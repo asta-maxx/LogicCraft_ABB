@@ -1,5 +1,7 @@
 # ABB Code Assistant - Project Documentation
 
+![Architecture Diagram](./architecture.png)
+
 ## Overview
 ABB Code Assistant is a full-stack, production-grade platform for conversational code generation and validation, powered by advanced LLMs (Large Language Models). It enables users to interact naturally with an AI to generate, refine, and validate code, with session-based memory for multi-turn conversations.
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList;
@@ -27,11 +27,11 @@ declare global {
   }
 }
 
-export function useSpeechToText() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSupported, setIsSupported] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -42,15 +42,13 @@ export function useSpeechToText() {
 
   const startListening = useCallback(() => {
     if (typeof window === 'undefined') return;
-    
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
     if (!SpeechRecognition) {
       setError('Speech recognition is not supported in this browser');
       return;
     }
-
     const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
@@ -60,16 +58,14 @@ export function useSpeechToText() {
       setError(null);
     };
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       let finalTranscript = '';
-      
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         if (result.isFinal) {
           finalTranscript += result[0].transcript;
         }
       }
-      
       if (finalTranscript) {
         setTranscript(prev => prev + ' ' + finalTranscript);
       }
@@ -88,6 +84,10 @@ export function useSpeechToText() {
   }, []);
 
   const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
     setIsListening(false);
   }, []);
 
