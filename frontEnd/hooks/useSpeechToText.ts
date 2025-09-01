@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -27,6 +28,7 @@ declare global {
   }
 }
 
+function useSpeechToText() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -68,6 +70,7 @@ declare global {
       }
       if (finalTranscript) {
         setTranscript(prev => prev + ' ' + finalTranscript);
+        recognition.stop(); // Automatically stop after final transcript
       }
     };
 
@@ -105,3 +108,5 @@ declare global {
     resetTranscript,
   };
 }
+
+export default useSpeechToText;
