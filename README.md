@@ -109,3 +109,22 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
 ---
 
 **This solution is ready for production and extensible for future features.**
+
+
+---
+
+## 📬 Contact
+
+<div align="center">
+
+<a href="mailto:tjallenmatthew@gmail.com">
+  <img src="https://img.shields.io/badge/Email-tjallenmatthew@gmail.com-blue?style=for-the-badge&logo=gmail" alt="Email" />
+</a>
+&nbsp; &nbsp;
+<a href="https://allenmatthew.co" target="_blank">
+  <img src="https://img.shields.io/badge/Portfolio-allenmatthew.co-29a3a3?style=for-the-badge&logo=internet-explorer" alt="Portfolio" />
+</a>
+
+</div>
+
+---
