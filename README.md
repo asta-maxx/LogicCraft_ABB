@@ -1,4 +1,5 @@
 
+
 # Logiccraft - Project Documentation
 <p align="center">
   <img src="./LogicCraftABB.png" alt="LogicCraft Logo" width="200"/>
@@ -134,6 +135,11 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
   <img src="https://img.shields.io/badge/Portfolio-allenmatthew.co-29a3a3?style=for-the-badge&logo=internet-explorer" alt="Portfolio" />
 </a>
 
+  
 </div>
 
----
+<p align="center" style="margin-top: 32px;">
+  <img src="./vultr!x.png" alt="Vultrix One Logo" width="180"/>
+</p>
+
+----

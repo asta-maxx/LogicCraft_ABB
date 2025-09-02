@@ -5,7 +5,6 @@ import { Card, CardBody } from '@nextui-org/react';
 import { NaturalLanguageInput } from '@/components/NaturalLanguageInput';
 import { GeneratedCodeEditor } from '@/components/GeneratedCodeEditor';
 import { ValidationResults } from '@/components/ValidationResults';
-import { Code2, Zap } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface ValidationResult {
@@ -99,8 +98,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-primary">
-              <Code2 className="w-8 h-8" />
-              <Zap className="w-6 h-6" />
+              <img src="/logo.png" alt="LogicCraft Logo" className="w-20 h-20" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-foreground">LogicCraft AI</h1>
