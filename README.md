@@ -1,6 +1,4 @@
-
-
-# Logiccraft - Project Documentation
+# LogicCraft - Project Documentation
 <p align="center">
   <img src="./LogicCraftABB.png" alt="LogicCraft Logo" width="200"/>
 </p>
@@ -112,30 +110,39 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
 
 ---
 
-## Contact & Contribution
-- Fork the repo, create issues, and submit pull requests for improvements.
-- For questions, contact the maintainer or open a GitHub issue.
-
----
-
-**This solution is ready for production and extensible for future features.**
-
-
----
-
-## 📬 Contact
+## Collaborators
 
 <div align="center">
 
-<a href="mailto:tjallenmatthew@gmail.com">
-  <img src="https://img.shields.io/badge/Email-tjallenmatthew@gmail.com-blue?style=for-the-badge&logo=gmail" alt="Email" />
-</a>
-&nbsp; &nbsp;
-<a href="https://allenmatthew.co" target="_blank">
-  <img src="https://img.shields.io/badge/Portfolio-allenmatthew.co-29a3a3?style=for-the-badge&logo=internet-explorer" alt="Portfolio" />
-</a>
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/asta-maxx">
+        <img src="https://avatars.githubusercontent.com/asta-maxx" width="100" alt="asta-maxx"/><br/>
+        <b>Allen</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Jerin-004">
+        <img src="https://avatars.githubusercontent.com/Jerin-004" width="100" alt="Chijith Jerin Stalin"/><br/>
+        <b>Chijith Jerin Stalin</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/irinesebatina-005">
+        <img src="https://avatars.githubusercontent.com/irinesebatina-005" width="100" alt="irinesebatina-005"/><br/>
+        <b>irinesebatina-005</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Jeromes17">
+        <img src="https://avatars.githubusercontent.com/Jeromes17" width="100" alt="collab4"/><br/>
+        <b>Jerome</b>
+      </a>
+    </td>
+  </tr>
+</table>
 
-  
 </div>
 
 ----
