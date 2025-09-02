@@ -138,8 +138,4 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
   
 </div>
 
-<p align="center" style="margin-top: 32px;">
-  <img src="./vultr!x.png" alt="Vultrix One Logo" width="180"/>
-</p>
-
 ----
