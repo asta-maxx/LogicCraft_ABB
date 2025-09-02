@@ -1,6 +1,15 @@
-# ABB Code Assistant - Project Documentation
 
-![Architecture Diagram](./architecture.png)
+# Logiccraft - Project Documentation
+<p align="center">
+  <img src="./LogicCraftABB.png" alt="LogicCraft Logo" width="200"/>
+</p>
+
+<p align="center" style="margin-top: 16px;">
+  <b>Proudly by</b><br>
+  <img src="./Vultr!x.png" alt="Vultrix One Logo" width="180"/>
+</p>
+
+---
 
 ## Overview
 ABB Code Assistant is a full-stack, production-grade platform for conversational code generation and validation, powered by advanced LLMs (Large Language Models). It enables users to interact naturally with an AI to generate, refine, and validate code, with session-based memory for multi-turn conversations.
@@ -8,7 +17,7 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
 ---
 
 ## Architecture
-
+![Architecture Diagram](./architecture.png)
 ### 1. Backend (logiccraft_backend)
 - **Framework:** Django REST API
 - **Features:**
