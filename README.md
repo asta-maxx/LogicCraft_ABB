@@ -3,11 +3,6 @@
   <img src="./LogicCraftABB.png" alt="LogicCraft Logo" width="200"/>
 </p>
 
-<p align="center" style="margin-top: 16px;">
-  <b>Proudly by</b><br>
-  <img src="./Vultr!x.png" alt="Vultrix One Logo" width="180"/>
-</p>
-
 ---
 
 ## Overview

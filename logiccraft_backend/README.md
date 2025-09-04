@@ -1,3 +1,4 @@
+
 # LogicCraft AI Backend API
 
 ## Prerequisites
@@ -14,11 +15,13 @@
    DEBUG=False
    SECRET_KEY=your-secret-key-here
    REDIS_URL=redis://localhost:6379/0
-   VLLM_SERVER_URL=http://localhost:8001/v1
    CORS_ALLOWED_ORIGINS=http://localhost:3000
    ```
 5. Run migrations: `python manage.py migrate`
 6. Start the server: `python manage.py runserver`
+
+## AI Model Usage
+This backend uses Hugging Face's `transformers` and `torch` to run the CodeLlama model (`codellama/CodeLlama-7b-hf`) directly from the Hugging Face Hub. No local model download or VLLM server is required.
 
 ## API Reference
 - **POST** `/api/generate/`
@@ -26,7 +29,6 @@
 
 ## Connecting the Services
 - Frontend: Set `NEXT_PUBLIC_API_BASE_URL` to this Django server (e.g., `http://localhost:8000/api`).
-- AI Service: vLLM server must be running and accessible at `VLLM_SERVER_URL`.
 - Redis: Redis server must be running.
 
 ## Testing

@@ -1,3 +1,4 @@
+from rest_framework.views import APIView
 from .services import get_or_create_session, store_conversation, get_conversation_history
 class LLMConversationView(APIView):
     def post(self, request):
@@ -14,7 +15,6 @@ class LLMConversationView(APIView):
         generated_code = f"[LLM output for]: {prompt}"  # Placeholder
         store_conversation(session, user_prompt, generated_code)
         return Response({'session_id': session.session_id, 'generated_code': generated_code})
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .services import CodeGenerationService, CodeValidationService
