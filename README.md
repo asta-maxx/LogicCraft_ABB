@@ -1,148 +1,124 @@
-# LogicCraft - Project Documentation
-<p align="center">
-  <img src="./LogicCraftABB.png" alt="LogicCraft Logo" width="200"/>
-</p>
+LogicCraft - ABB Code Assistant
+Overview
 
-<p align="center" style="margin-top: 16px;">
-  <b>Proudly by</b><br>
-  <img src="./Vultr!x.png" alt="Vultrix One Logo" width="180"/>
-</p>
+ABB Code Assistant is a full-stack, production-grade platform for conversational code generation and validation, powered by advanced Large Language Models (LLMs).
+It enables users to interact naturally with an AI to generate, refine, and validate code, with session-based memory for multi-turn conversations.
+Architecture
+1. Backend (backend/)
 
----
+    Framework: Django REST Framework
 
-## Overview
-ABB Code Assistant is a full-stack, production-grade platform for conversational code generation and validation, powered by advanced LLMs (Large Language Models). It enables users to interact naturally with an AI to generate, refine, and validate code, with session-based memory for multi-turn conversations.
+    Features:
 
----
+        Session-based conversational memory (multi-turn, context-aware code generation)
 
-## Architecture
-![Architecture Diagram](./architecture.png)
-### 1. Backend (logiccraft_backend)
-- **Framework:** Django REST API
-- **Features:**
-  - Session-based conversational memory (multi-turn, context-aware code generation)
-  - Code validation
-  - PostgreSQL for persistent storage
-  - Caching for repeated prompts
-- **Key Files:**
-  - `api/models.py`: Defines `Session` and `ConversationHistory` models for session memory.
-  - `api/services.py`: Handles session creation, history storage/retrieval, code generation, and validation.
-  - `api/views.py`: API endpoints for code generation, validation, and session-based conversation.
-  - `api/admin.py`: Registers models for Django admin.
-  - `logiccraft_backend/settings.py`: Configures PostgreSQL and environment variables.
+        Code validation and generation
 
-### 2. LLM Service (LLM/ai-service)
-- **Purpose:** Hosts and serves the LLM (e.g., CodeLlama) via an API endpoint.
-- **Integration:** Backend calls this service to generate code from prompts.
+        PostgreSQL for persistent storage
 
-### 3. Frontend (ABB_FrontEnd)
-- **Framework:** Next.js + React + Tailwind CSS
-- **Features:**
-  - Natural language input for prompts
-  - Display of generated code and validation results
-  - Session management for multi-turn conversations
-  - Modern, responsive UI
+        Caching for repeated prompts
 
----
+    Key Modules:
 
-## Novel Points & Specialities
-- **Session-Based Memory:** Enables natural, multi-step code refinement and context retention for each user.
-- **Pluggable LLM Backend:** Easily swap or upgrade LLM models without changing the frontend or main backend logic.
-- **Full Stack Integration:** Seamless communication between frontend, backend, and LLM service.
-- **Production-Ready:** Secure, scalable, and extensible architecture with PostgreSQL and Django REST.
+        core/models.py → Defines session & history models
 
----
+        core/views.py → API endpoints for code generation, validation, and retrieval
 
-## How to Run
+        core/rag_service.py → Handles RAG-based code generation with LLMs
 
-### 1. LLM Service
-- Build and run the Docker container in `LLM/ai-service`.
-- Ensure the API endpoint is accessible to the backend.
+        backend/settings.py → Configures DB and environment variables
 
-### 2. Backend
-- Install dependencies:
-  ```sh
-  pip install -r requirements.txt django-environ
-  ```
-- Run migrations:
-  ```sh
-  python manage.py makemigrations api
-  python manage.py migrate
-  ```
-- Start the server:
-  ```sh
-  python manage.py runserver
-  ```
+2. Frontend (frontend/)
 
-### 3. Frontend
-- Install dependencies:
-  ```sh
-  npm install
-  ```
-- Run:
-  ```sh
-  npm run dev
-  ```
-- Access the UI in your browser.
+    Framework: Next.js + React + Tailwind CSS
 
----
+    Features:
 
-## How to Use
-1. Enter prompts in the frontend.
-2. Backend creates/uses a session, stores history, and generates code using the LLM service.
-3. Validate code and refine as needed.
-4. Each session retains conversational context for a natural experience.
+        Natural language input for prompts
 
----
+        Display generated code and validation results
 
-## Extending the Project
-- Add authentication for user accounts.
-- Integrate more LLM models or external APIs.
-- Enhance frontend with more UI features (e.g., code diff, history navigation).
-- Add analytics and usage tracking.
+        Session management for multi-turn conversations
 
----
+        Responsive, modern UI
 
-## File Structure Reference
-- `ABB_FrontEnd/`: Next.js frontend
-- `LLM/`: LLM service and models
-- `logiccraft_backend/`: Django backend
+Unique Features
 
----
+    Session-Based Memory: Multi-turn code refinement with context retention.
 
-## Collaborators
+    Pluggable LLM Backend: Swap models (Phi-2, LLaMA, etc.) without frontend/backend rewrite.
 
-<div align="center">
+    Full-Stack Integration: Seamless communication between frontend, backend, and LLM service.
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/asta-maxx">
-        <img src="https://avatars.githubusercontent.com/asta-maxx" width="100" alt="asta-maxx"/><br/>
-        <b>Allen</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Jerin-004">
-        <img src="https://avatars.githubusercontent.com/Jerin-004" width="100" alt="Chijith Jerin Stalin"/><br/>
-        <b>Chijith Jerin Stalin</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/irinesebatina-005">
-        <img src="https://avatars.githubusercontent.com/irinesebatina-005" width="100" alt="irinesebatina-005"/><br/>
-        <b>irinesebatina-005</b>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Jeromes17">
-        <img src="https://avatars.githubusercontent.com/Jeromes17" width="100" alt="collab4"/><br/>
-        <b>Jerome</b>
-      </a>
-    </td>
-  </tr>
-</table>
+    Production Ready: PostgreSQL, caching, and extensible API design.
 
-</div>
+Installation & Setup
+Backend (Django)
 
-----
+# Navigate to backend
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run migrations
+python manage.py makemigrations core
+python manage.py migrate
+
+# Start server
+python manage.py runserver
+
+The backend runs at: http://127.0.0.1:8000/
+Frontend (Next.js + React)
+
+# Navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+The frontend runs at: http://localhost:3000/
+How to Use
+
+    Start both backend and frontend servers.
+
+    Open the frontend in your browser.
+
+    Enter prompts into the input box.
+
+    Backend generates responses via the LLM service.
+
+    Validate, refine, and iterate with session-based memory.
+
+Extending the Project
+
+    Add authentication and user accounts
+
+    Plug in more LLMs (CodeLlama, GPT, etc.)
+
+    Improve frontend with features like code diffs and history navigation
+
+    Add analytics and monitoring
+
+Project Structure
+
+LogicCraft/
+│── backend/               # Django backend
+│   ├── core/              # Core app with models, views, rag_service
+│   ├── manage.py
+│   └── requirements.txt
+│
+│── frontend/              # Next.js frontend
+│   ├── pages/
+│   ├── components/
+│   └── package.json
+│
+└── README.md
