@@ -1,5 +1,5 @@
-LogicCraft - ABB Code Assistant
-Overview
+# LogicCraft - ABB Code Assistant
+# Overview
 
 ABB Code Assistant is a full-stack, production-grade platform for conversational code generation and validation, powered by advanced Large Language Models (LLMs).
 It enables users to interact naturally with an AI to generate, refine, and validate code, with session-based memory for multi-turn conversations.
@@ -55,10 +55,10 @@ Unique Features
 Installation & Setup
 Backend (Django)
 
-# Navigate to backend
+### Navigate to backend
 cd backend
 
-# Create virtual environment
+### Create virtual environment
 python -m venv venv
 source venv/bin/activate   # Linux/Mac
 venv\Scripts\activate      # Windows
@@ -66,23 +66,23 @@ venv\Scripts\activate      # Windows
 # Install dependencies
 pip install -r requirements.txt
 
-# Run migrations
+### Run migrations
 python manage.py makemigrations core
 python manage.py migrate
 
-# Start server
+### Start server
 python manage.py runserver
 
 The backend runs at: http://127.0.0.1:8000/
 Frontend (Next.js + React)
 
-# Navigate to frontend
+### Navigate to frontend
 cd frontend
 
-# Install dependencies
+### Install dependencies
 npm install
 
-# Start development server
+### Start development server
 npm run dev
 
 The frontend runs at: http://localhost:3000/
@@ -109,7 +109,7 @@ Extending the Project
     Add analytics and monitoring
 
 Project Structure
-
+```
 LogicCraft/
 │── backend/               # Django backend
 │   ├── core/              # Core app with models, views, rag_service
@@ -122,3 +122,4 @@ LogicCraft/
 │   └── package.json
 │
 └── README.md
+```
