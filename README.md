@@ -11,7 +11,7 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
 ---
 
 ## Architecture
-![Architecture Diagram](./architecture.png)
+![Architecture Diagram](./Architecture.jpeg)
 ### 1. Backend (logiccraft_backend)
 - **Framework:** Django REST API
 - **Features:**

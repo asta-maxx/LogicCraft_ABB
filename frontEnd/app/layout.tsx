@@ -1,13 +1,13 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'LogicCraft AI - Industrial Control Code Generator',
-  description: 'Generate IEC 61131-3 industrial control code using natural language and AI',
+  title: 'ABB IEC 61131 Code Generator - Professional Edition',
+  description: 'Advanced AI-powered code generator for IEC 61131-3 Structured Text. Professional industrial automation development tool by ABB.',
+  keywords: 'IEC 61131, Structured Text, PLC, ABB, Industrial Automation, Code Generator',
 };
 
 export default function RootLayout({
@@ -16,14 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        <link rel="icon" href="/logo.png" type="image/png" />
-      </head>
+    <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
+        {children}
       </body>
     </html>
   );
