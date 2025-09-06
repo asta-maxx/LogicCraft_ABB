@@ -57,10 +57,3 @@ logiccraft_backend/dist/
 LLM/models/*
 !LLM/models/.gitkeep
 
-# Images
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-!frontEnd/public/logo.png
