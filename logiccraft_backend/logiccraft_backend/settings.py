@@ -7,7 +7,7 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = env('SECRET_KEY', default='replace-me')
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-$kp7vthhl3_51xye=&byc%w96-%r6$-#!kab_wg^q@i@*5-bl!')
 DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 
@@ -86,10 +86,11 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=['http://localhost:3000'])
 REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
 VLLM_SERVER_URL = env('VLLM_SERVER_URL', default='http://localhost:8001/v1')
 CHROMADB_SERVER_URL = env('CHROMADB_SERVER_URL', default='http://localhost:8000')
-
+CHROMA_PERSIST_DIR = '/LLM/chromadb'
+CHROMA_DEFAULT_K = 5
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

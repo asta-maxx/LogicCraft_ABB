@@ -193,85 +193,27 @@ export default function Home() {
 
   const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) return;
-
     setIsGenerating(true);
     setValidationStatus('idle');
-    
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Mock IEC 61131-3 Structured Text generation
-      const mockCode = `FUNCTION_BLOCK FB_${prompt.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20)}
-VAR_INPUT
-    bStart : BOOL := FALSE;
-    bStop : BOOL := FALSE;
-    bReset : BOOL := FALSE;
-END_VAR
-
-VAR_OUTPUT
-    bRunning : BOOL := FALSE;
-    bError : BOOL := FALSE;
-    nStatus : INT := 0;
-END_VAR
-
-VAR
-    tTimer : TON;
-    nStep : INT := 0;
-    bInit : BOOL := TRUE;
-END_VAR
-
-// Generated code based on prompt: "${prompt}"
-IF bInit THEN
-    bInit := FALSE;
-    nStep := 0;
-    bRunning := FALSE;
-    bError := FALSE;
-    nStatus := 0;
-END_IF
-
-CASE nStep OF
-    0: // Idle state
-        IF bStart AND NOT bStop THEN
-            nStep := 10;
-            bRunning := TRUE;
-            nStatus := 1;
-        END_IF
-        
-    10: // Running state
-        IF bStop OR bError THEN
-            nStep := 20;
-        END_IF
-        
-    20: // Stopping state
-        bRunning := FALSE;
-        nStatus := 0;
-        nStep := 0;
-        
-END_CASE
-
-// Reset functionality
-IF bReset THEN
-    bError := FALSE;
-    nStatus := 0;
-    nStep := 0;
-    bRunning := FALSE;
-END_IF`;
-
-      setGeneratedCode(mockCode);
-      
-      // Add to history
-      const newGeneration: Generation = {
+      const res = await fetch('http://127.0.0.1:8000/api/generate/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: prompt }),
+      });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+      const code = data.code || '';
+      setGeneratedCode(code);
+      const newGen: Generation = {
         id: Date.now().toString(),
         prompt: prompt.trim(),
-        code: mockCode,
-        timestamp: new Date()
+        code,
+        timestamp: new Date(),
       };
-      
-      setGenerations(prev => [newGeneration, ...prev.slice(0, 9)]); // Keep last 10
-      
-    } catch (error) {
-      console.error('Generation failed:', error);
+      setGenerations(prev => [newGen, ...prev.slice(0, 9)]);
+    } catch (err) {
+      console.error('Generation failed:', err);
       setGeneratedCode('// Error: Failed to generate code. Please try again.');
     } finally {
       setIsGenerating(false);
