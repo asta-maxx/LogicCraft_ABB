@@ -38,7 +38,7 @@ def get_conversation_history(session, n_turns=10):
 
 class CodeGenerationService:
     @staticmethod
-    def generate(input_text: str):
+    def generate(input_text: str, max_attempts: int = 5):
         cache = CacheManager(getattr(settings, "REDIS_URL", None))
         key = hashlib.md5(input_text.encode()).hexdigest()
         try:
@@ -47,22 +47,40 @@ class CodeGenerationService:
             cached_code = None
 
         if cached_code:
-            return {"code": cached_code, "source": "cache"}
+            # Optionally, validate cached code before returning
+            validation = CodeValidationService.validate(cached_code)
+            if validation.get('valid'):
+                return {"code": cached_code, "source": "cache", "validation": validation}
 
         base = getattr(settings, "VLLM_SERVER_URL", "http://localhost:8001")
         llm = LLMClient(base)
-        try:
-            code = llm.generate_code(prompt=input_text, max_tokens=200, temperature=0.1)
-        except Exception as e:
-            return {"error": str(e)}
+        last_error = None
+        prompt = input_text
+        for attempt in range(1, max_attempts + 1):
+            try:
+                code = llm.generate_code(prompt=prompt, max_tokens=200, temperature=0.1)
+            except Exception as e:
+                return {"error": str(e), "attempt": attempt}
 
-        try:
-            if cache:
-                cache.set(key, code, ttl=86400)
-        except Exception:
-            pass
+            validation = CodeValidationService.validate(code)
+            if validation.get('valid'):
+                try:
+                    if cache:
+                        cache.set(key, code, ttl=86400)
+                except Exception:
+                    pass
+                return {"code": code, "source": "llm", "validation": validation, "attempts": attempt}
+            else:
+                last_error = validation.get('errors')
+                # Refine prompt with error feedback
+                prompt = f"{input_text}\nThe previous code had the following errors during IEC validation: {last_error}\nPlease fix the code and try again."
 
-        return {"code": code, "source": "llm"}
+        return {
+            "error": "Failed to generate valid code after multiple attempts.",
+            "last_code": code,
+            "last_error": last_error,
+            "attempts": max_attempts
+        }
 
 class CodeValidationService:
     @staticmethod
