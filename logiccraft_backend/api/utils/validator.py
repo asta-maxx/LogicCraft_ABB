@@ -25,7 +25,7 @@ class Validator:
             project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
             iec2c_path = os.path.join(project_root, 'iec2c')
             if not os.path.isfile(iec2c_path):
-                iec2c_path = 'iec2c'  # fallback to PATH if not found locally
+                iec2c_path = '../../iec2c'  # fallback to PATH if not found locally
                 cwd = tmpdir
             else:
                 cwd = tmpdir

@@ -57,3 +57,4 @@ logiccraft_backend/dist/
 LLM/models/*
 !LLM/models/.gitkeep
 
+matiec

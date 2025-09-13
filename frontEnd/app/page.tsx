@@ -207,10 +207,10 @@ export default function Home() {
     setValidationStatus('idle');
     try {
       // Call your LLM API endpoint here
-  const response = await fetch(`${API_BASE}/generate`, {
+  const response = await fetch(`${API_BASE}/generate/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ input: prompt }),
       });
       if (!response.ok) throw new Error('Failed to generate code');
       const data = await response.json();
@@ -238,7 +238,7 @@ export default function Home() {
     setIsValidating(true);
     try {
       // Call your validation API endpoint here
-  const response = await fetch(`${API_BASE}/validate`, {
+  const response = await fetch(`${API_BASE}/validate/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: generatedCode }),
@@ -304,7 +304,7 @@ export default function Home() {
     setUserIsValidating(true);
     setUserValidationError(null);
     try {
-  const response = await fetch(`${API_BASE}/validate`, {
+  const response = await fetch(`${API_BASE}/validate/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: userCode }),
