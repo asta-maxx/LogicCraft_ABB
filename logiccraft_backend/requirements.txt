@@ -1,3 +1,5 @@
+django-allauth
+social-auth-app-django
 transformers>=4.40.0
 torch>=2.0.0
 django>=4.2

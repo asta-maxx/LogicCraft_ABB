@@ -26,6 +26,9 @@ import {
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api';
+import { useSession } from 'next-auth/react';
+
 // Custom hooks for speech functionality with fallbacks
 const useSpeechSynthesis = () => {
   const [speaking, setSpeaking] = useState(false);
@@ -117,7 +120,13 @@ const examplePrompts = [
 ];
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const [prompt, setPrompt] = useState('');
+  // User code validation state
+  const [userCode, setUserCode] = useState('');
+  const [userValidationStatus, setUserValidationStatus] = useState<'idle' | 'valid' | 'invalid'>('idle');
+  const [userValidationError, setUserValidationError] = useState<string | null>(null);
+  const [userIsValidating, setUserIsValidating] = useState(false);
   const [generatedCode, setGeneratedCode] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -196,80 +205,25 @@ export default function Home() {
 
     setIsGenerating(true);
     setValidationStatus('idle');
-    
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Mock IEC 61131-3 Structured Text generation
-      const mockCode = `FUNCTION_BLOCK FB_${prompt.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20)}
-VAR_INPUT
-    bStart : BOOL := FALSE;
-    bStop : BOOL := FALSE;
-    bReset : BOOL := FALSE;
-END_VAR
-
-VAR_OUTPUT
-    bRunning : BOOL := FALSE;
-    bError : BOOL := FALSE;
-    nStatus : INT := 0;
-END_VAR
-
-VAR
-    tTimer : TON;
-    nStep : INT := 0;
-    bInit : BOOL := TRUE;
-END_VAR
-
-// Generated code based on prompt: "${prompt}"
-IF bInit THEN
-    bInit := FALSE;
-    nStep := 0;
-    bRunning := FALSE;
-    bError := FALSE;
-    nStatus := 0;
-END_IF
-
-CASE nStep OF
-    0: // Idle state
-        IF bStart AND NOT bStop THEN
-            nStep := 10;
-            bRunning := TRUE;
-            nStatus := 1;
-        END_IF
-        
-    10: // Running state
-        IF bStop OR bError THEN
-            nStep := 20;
-        END_IF
-        
-    20: // Stopping state
-        bRunning := FALSE;
-        nStatus := 0;
-        nStep := 0;
-        
-END_CASE
-
-// Reset functionality
-IF bReset THEN
-    bError := FALSE;
-    nStatus := 0;
-    nStep := 0;
-    bRunning := FALSE;
-END_IF`;
-
-      setGeneratedCode(mockCode);
-      
+      // Call your LLM API endpoint here
+  const response = await fetch(`${API_BASE}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+      if (!response.ok) throw new Error('Failed to generate code');
+      const data = await response.json();
+      const code = data.code || '// No code generated.';
+      setGeneratedCode(code);
       // Add to history
       const newGeneration: Generation = {
         id: Date.now().toString(),
         prompt: prompt.trim(),
-        code: mockCode,
+        code,
         timestamp: new Date()
       };
-      
       setGenerations(prev => [newGeneration, ...prev.slice(0, 9)]); // Keep last 10
-      
     } catch (error) {
       console.error('Generation failed:', error);
       setGeneratedCode('// Error: Failed to generate code. Please try again.');
@@ -282,15 +236,16 @@ END_IF`;
     if (!generatedCode.trim()) return;
 
     setIsValidating(true);
-    
     try {
-      // Simulate validation
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock validation result
-      const isValid = !generatedCode.includes('ERROR') && generatedCode.includes('FUNCTION_BLOCK');
-      setValidationStatus(isValid ? 'valid' : 'invalid');
-      
+      // Call your validation API endpoint here
+  const response = await fetch(`${API_BASE}/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: generatedCode }),
+      });
+      if (!response.ok) throw new Error('Failed to validate code');
+      const data = await response.json();
+      setValidationStatus(data.valid ? 'valid' : 'invalid');
     } catch (error) {
       console.error('Validation failed:', error);
       setValidationStatus('invalid');
@@ -303,12 +258,16 @@ END_IF`;
     if (!generatedCode.trim()) return;
 
     setIsSimulating(true);
-    
     try {
-      // Simulate execution
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert('Simulation completed successfully! Check console for detailed results.');
-      
+      // Call your simulation API endpoint here
+  const response = await fetch(`${API_BASE}/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: generatedCode }),
+      });
+      if (!response.ok) throw new Error('Failed to simulate code');
+      const data = await response.json();
+      alert(data.message || 'Simulation completed successfully!');
     } catch (error) {
       console.error('Simulation failed:', error);
       alert('Simulation failed. Please check your code syntax.');
@@ -338,6 +297,29 @@ END_IF`;
   const useExamplePrompt = useCallback((example: string) => {
     setPrompt(example);
   }, []);
+
+  // User code validation handler
+  const handleUserValidate = useCallback(async () => {
+    if (!userCode.trim()) return;
+    setUserIsValidating(true);
+    setUserValidationError(null);
+    try {
+  const response = await fetch(`${API_BASE}/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: userCode }),
+      });
+      if (!response.ok) throw new Error('Failed to validate code');
+      const data = await response.json();
+      setUserValidationStatus(data.valid ? 'valid' : 'invalid');
+      setUserValidationError(data.errors || null);
+    } catch (error) {
+      setUserValidationStatus('invalid');
+      setUserValidationError('Validation failed. Please try again.');
+    } finally {
+      setUserIsValidating(false);
+    }
+  }, [userCode]);
 
   return (
     <div className={cn(
@@ -406,6 +388,98 @@ END_IF`;
           {/* Left Column - Input and Examples */}
           <div className="lg:col-span-1 space-y-6">
             
+            {/* User Code Validation */}
+            <Card className={cn(
+              "shadow-lg transition-colors duration-300",
+              isDarkMode 
+                ? "border-gray-700 bg-gray-800" 
+                : "border-blue-200 bg-white"
+            )}>
+              <CardHeader className={cn(
+                "text-white rounded-t-lg transition-colors duration-300",
+                isDarkMode 
+                  ? "bg-gradient-to-r from-green-700 to-green-800" 
+                  : "bg-gradient-to-r from-green-600 to-green-700"
+              )}>
+                <CardTitle className="flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5" />
+                  <span>Validate Your Own Code</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <Textarea
+                  placeholder="Paste or type your IEC 61131-3 Structured Text code here..."
+                  value={userCode}
+                  onChange={e => {
+                    setUserCode(e.target.value);
+                    setUserValidationStatus('idle');
+                    setUserValidationError(null);
+                  }}
+                  className={cn(
+                    "min-h-32 focus:ring-green-200 transition-colors duration-300 mb-4",
+                    isDarkMode 
+                      ? "border-gray-600 bg-gray-700 text-white focus:border-green-400 placeholder:text-gray-400" 
+                      : "border-green-200 bg-white focus:border-green-500 placeholder:text-gray-500"
+                  )}
+                  rows={6}
+                />
+                <Button
+                  onClick={handleUserValidate}
+                  disabled={!userCode.trim() || userIsValidating}
+                  className={cn(
+                    "w-full text-white font-medium py-3 transition-all duration-300 mb-2",
+                    isDarkMode 
+                      ? "bg-gradient-to-r from-green-700 to-green-800 hover:from-green-800 hover:to-green-900" 
+                      : "bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+                  )}
+                >
+                  {userIsValidating ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      Validating...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Validate Code
+                    </>
+                  )}
+                </Button>
+                {userValidationStatus !== 'idle' && (
+                  <div className={cn(
+                    "flex flex-col space-y-2 p-3 rounded-lg text-sm font-medium transition-colors duration-300",
+                    userValidationStatus === 'valid' 
+                      ? isDarkMode
+                        ? "bg-green-950 text-green-400 border border-green-800"
+                        : "bg-green-50 text-green-700 border border-green-200"
+                      : isDarkMode
+                        ? "bg-red-950 text-red-400 border border-red-800"
+                        : "bg-red-50 text-red-700 border border-red-200"
+                  )}>
+                    <div className="flex items-center space-x-2">
+                      {userValidationStatus === 'valid' ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <AlertCircle className="w-4 h-4" />
+                      )}
+                      <span>
+                        {userValidationStatus === 'valid' 
+                          ? "Code validation successful" 
+                          : "Code contains syntax errors"
+                        }
+                      </span>
+                    </div>
+                    {userValidationStatus === 'invalid' && userValidationError && (
+                      <pre className={cn(
+                        "whitespace-pre-wrap break-words text-xs mt-1",
+                        isDarkMode ? "text-red-300" : "text-red-700"
+                      )}>{userValidationError}</pre>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Prompt Input */}
             <Card className={cn(
               "shadow-lg transition-colors duration-300",
@@ -636,8 +710,8 @@ END_IF`;
               </CardContent>
             </Card>
 
-            {/* Recent Generations */}
-            {generations.length > 0 && (
+            {/* Recent Generations (only for logged-in users) */}
+            {session && generations.length > 0 && (
               <Card className={cn(
                 "shadow-lg transition-colors duration-300",
                 isDarkMode 

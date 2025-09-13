@@ -21,7 +21,30 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.google',
+    'social_django',
 ]
+
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.google.GoogleOAuth2',
+)
+
+# Google OAuth2 keys (set these in your .env or environment)
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('GOOGLE_CLIENT_ID', default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('GOOGLE_CLIENT_SECRET', default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -30,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -92,4 +116,9 @@ REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
 VLLM_SERVER_URL = env('VLLM_SERVER_URL', default='http://localhost:8001/v1')
 CHROMADB_SERVER_URL = env('CHROMADB_SERVER_URL', default='http://localhost:8000')
 
+
+# Session settings (explicit for PostgreSQL-backed sessions)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# Session cookie age (seconds) - default 2 weeks
+SESSION_COOKIE_AGE = 1209600
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

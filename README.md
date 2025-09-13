@@ -64,6 +64,26 @@ ABB Code Assistant is a full-stack, production-grade platform for conversational
   python manage.py makemigrations api
   python manage.py migrate
   ```
+- **Set up the matiec (iec2c) validator:**
+  - Before running the setup script, make sure you have the required build tools:
+    - **macOS:**
+      ```sh
+      brew install autoconf automake
+      ```
+    - **Ubuntu/Debian Linux:**
+      ```sh
+      sudo apt-get update
+      sudo apt-get install autoconf automake
+      ```
+  - Then run the setup script to automatically build or fetch the validator binary:
+    ```sh
+    bash setup_matiec.sh
+    ```
+  - **macOS/Linux:** The script will clone and build matiec, placing the `iec2c` binary in your project root.
+  - **Windows:**
+    - The script will attempt to find `iec2c.exe` from an OpenPLC installation and copy it to your project root.
+    - If not found, install OpenPLC from [https://www.openplcproject.com/download/](https://www.openplcproject.com/download/) and rerun the script.
+  - The backend will use this binary for code validation.
 - Start the server:
   ```sh
   python manage.py runserver

@@ -81,7 +81,7 @@ export function GeneratedCodeEditor({
               wordWrap: 'on',
               automaticLayout: true,
               bracketPairColorization: { enabled: true },
-              suggest: { enabled: true },
+              suggest: {},
               quickSuggestions: true,
             }}
           />

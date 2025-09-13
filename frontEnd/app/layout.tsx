@@ -1,6 +1,10 @@
+
+import React from 'react';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { GoogleLoginButton } from '../components/GoogleLoginButton';
+import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,7 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <Providers>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+            <GoogleLoginButton />
+          </div>
+          {children}
+        </Providers>
       </body>
     </html>
   );
